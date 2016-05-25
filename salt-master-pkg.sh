@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 SALT_ENGINE=${SALT_ENGINE:-pkg}
 SALT_VERSION=${SALT_VERSION:-latest}
@@ -10,8 +10,6 @@ RECLASS_BASE_ENV=${RECLASS_BASE_ENV:-dev}
 OS_DISTRIBUTION=${OS_DISTRIBUTION:-ubuntu}
 OS_VERSION=${OS_VERSION:-liberty}
 OS_DEPLOYMENT=${OS_DEPLOYMENT:-single}
-
-CONFIG_HOST=${CONFIG_HOST:-config.openstack.local}
 
 FORMULA_SOURCE=${FORMULA_SOURCE:-git}
 
