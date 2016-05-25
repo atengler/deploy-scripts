@@ -1,6 +1,8 @@
 #!/bin/bash
 
-CONFIG_HOST=${CONFIG_HOST:-config.openstack.local}
+CONFIG_HOSTNAME=${CONFIG_HOSTNAME:-config}
+CONFIG_DOMAIN=${CONFIG_DOMAIN:-openstack.local}
+CONFIG_HOST=${CONFIG_HOSTNAME}.${CONFIG_DOMAIN}
 
 FORMULA_PATH=${FORMULA_PATH:-/usr/share/salt-formulas/env/_formulas}
 FORMULA_BRANCH=${FORMULA_BRANCH:-master}

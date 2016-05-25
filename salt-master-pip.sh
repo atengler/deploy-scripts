@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SALT_ENGINE=${SALT_ENGINE:-pkg}
+SALT_ENGINE=${SALT_ENGINE:-pip}
 SALT_VERSION=${SALT_VERSION:-latest}
 
 RECLASS_ADDRESS=${RECLASS_ADDRESS:-https://github.com/tcpcloud/openstack-salt-model.git}
@@ -11,7 +11,10 @@ OS_DISTRIBUTION=${OS_DISTRIBUTION:-ubuntu}
 OS_NETWORKING=${OS_NETWORKING:-opencontrail}
 OS_DEPLOYMENT=${OS_DEPLOYMENT:-single}
 
-CONFIG_HOST=${CONFIG_HOST:-config.openstack.local}
+CONFIG_HOSTNAME=${CONFIG_HOSTNAME:-config}
+CONFIG_DOMAIN=${CONFIG_DOMAIN:-openstack.local}
+CONFIG_HOST=${CONFIG_HOSTNAME}.${CONFIG_DOMAIN}
+CONFIG_ADDRESS=${CONFIG_ADDRESS:-10.10.10.200}
 
 FORMULA_SOURCE=${FORMULA_SOURCE:-git}
 
@@ -71,7 +74,9 @@ EOF
 
 git clone ${RECLASS_ADDRESS} /srv/salt/reclass -b ${RECLASS_BRANCH}
 
-cat << EOF > /srv/salt/reclass/nodes/config.openstack.local.yml
+if [ ! -f "/srv/salt/reclass/nodes/${CONFIG_HOST}.yml" ]; then
+
+cat << EOF > /srv/salt/reclass/nodes/${CONFIG_HOST}.yml
 classes:
 - service.git.client
 - system.linux.system.single
@@ -85,18 +90,19 @@ parameters:
     reclass_data_repository: "$RECLASS_ADDRESS"
     reclass_data_revision: $RECLASS_BRANCH
     salt_formula_branch: $FORMULA_BRANCH
-    reclass_config_master: 10.10.10.200
-    single_address: 10.10.10.200
+    reclass_config_master: $CONFIG_ADDRESS
+    single_address: $CONFIG_ADDRESS
     salt_master_host: 127.0.0.1
     salt_master_base_environment: $RECLASS_BASE_ENV
   linux:
     system:
-      name: config
-      domain: openstack.local
+      name: $CONFIG_HOSTNAME
+      domain: $CONFIG_DOMAIN
 EOF
 
 if [ "$SALT_VERSION" == "latest" ]; then
-cat << EOF >> /srv/salt/reclass/nodes/config.openstack.local.yml
+
+cat << EOF >> /srv/salt/reclass/nodes/${CONFIG_HOST}.yml
   salt:
     master:
       accept_policy: open_mode
@@ -106,8 +112,10 @@ cat << EOF >> /srv/salt/reclass/nodes/config.openstack.local.yml
       source:
         engine: $SALT_ENGINE
 EOF
+
 else
-cat << EOF >> /srv/salt/reclass/nodes/config.openstack.local.yml
+
+cat << EOF >> /srv/salt/reclass/nodes/${CONFIG_HOST}.yml
   salt:
     master:
       accept_policy: open_mode
@@ -119,5 +127,8 @@ cat << EOF >> /srv/salt/reclass/nodes/config.openstack.local.yml
         engine: $SALT_ENGINE
         version: $SALT_VERSION
 EOF
+
+fi
+
 fi
 
