@@ -14,18 +14,20 @@ wget -O - http://apt.tcpcloud.eu/public.gpg | apt-key add -
 apt-get clean
 apt-get update
 
+[ ! -d /srv/salt/reclass/classes/service ] && mkdir -p /srv/salt/reclass/classes/service
+
 declare -a FORMULA_SERVICES=("linux" "reclass" "salt" "openssh" "ntp" "git" "nginx" "collectd" "sensu" "heka" "sphinx")
 
 for FORMULA_SERVICE in "${FORMULA_SERVICES[@]}"; do
     echo -e "\nConfiguring salt formula ${FORMULA_SERVICE} ...\n"
     [ ! -d "/usr/share/salt-formulas/env/${FORMULA_SERVICE}" ] && \
         apt-get install -y salt-formula-${FORMULA_SERVICE}
+    [ ! -L "/srv/salt/reclass/classes/service/${FORMULA_SERVICE}" ] && \
+        ln -s /usr/share/salt-formulas/reclass/service/${FORMULA_SERVICE}/metadata/service /srv/salt/reclass/classes/service/${FORMULA_SERVICE}
 done
 
 [ ! -d /srv/salt/env ] && mkdir -p /srv/salt/env
-[ ! -L /srv/salt/env/dev ] && ln -s /usr/share/salt-formulas/env /srv/salt/env/dev
 [ ! -L /srv/salt/env/prd ] && ln -s /usr/share/salt-formulas/env /srv/salt/env/prd
-[ ! -L /srv/salt/reclass/classes/service ] && ln -s /usr/share/salt-formulas/reclass/service /srv/salt/reclass/classes/service
 
 echo -e "\nRestarting services ...\n"
 service salt-master restart
