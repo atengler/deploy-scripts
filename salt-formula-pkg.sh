@@ -30,7 +30,7 @@ done
 
 echo -e "\nRestarting services ...\n"
 service salt-master restart
-[ ! -f /srv/salt/env ] && rm -f /etc/salt/pki/minion/minion_master.pub
+[ -f /etc/salt/pki/minion/minion_master.pub ] && rm -f /etc/salt/pki/minion/minion_master.pub
 service salt-minion restart
 salt-call pillar.data > /dev/null 2>&1
 
