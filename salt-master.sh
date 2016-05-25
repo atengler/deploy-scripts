@@ -3,9 +3,18 @@
 SALT_ENGINE=${SALT_ENGINE:-pkg}
 SALT_VERSION=${SALT_VERSION:-latest}
 
+FORMULA_SOURCE=${FORMULA_SOURCE:-git}
+FORMULA_PATH=${FORMULA_PATH:-/usr/share/salt-formulas/env/_formulas}
+FORMULA_BRANCH=${FORMULA_BRANCH:-master}
+
+if [ "$FORMULA_SOURCE" == "git" ]; then
+  RECLASS_BASE_ENV="dev"
+elif [ "$FORMULA_SOURCE" == "pkg" ]; then
+  RECLASS_BASE_ENV="prd"
+fi
+
 RECLASS_ADDRESS=${RECLASS_ADDRESS:-https://github.com/tcpcloud/openstack-salt-model.git}
 RECLASS_BRANCH=${RECLASS_BRANCH:-master}
-RECLASS_BASE_ENV=${RECLASS_BASE_ENV:-dev}
 
 OS_DISTRIBUTION=${OS_DISTRIBUTION:-ubuntu}
 OS_NETWORKING=${OS_NETWORKING:-opencontrail}
@@ -15,10 +24,6 @@ CONFIG_HOSTNAME=${CONFIG_HOSTNAME:-config}
 CONFIG_DOMAIN=${CONFIG_DOMAIN:-openstack.local}
 CONFIG_HOST=${CONFIG_HOSTNAME}.${CONFIG_DOMAIN}
 CONFIG_ADDRESS=${CONFIG_ADDRESS:-10.10.10.200}
-
-FORMULA_SOURCE=${FORMULA_SOURCE:-git}
-FORMULA_PATH=${FORMULA_PATH:-/usr/share/salt-formulas/env/_formulas}
-FORMULA_BRANCH=${FORMULA_BRANCH:-master}
 
 [ ! -d /root/deploy-scripts ] && mkdir /root/deploy-scripts
 

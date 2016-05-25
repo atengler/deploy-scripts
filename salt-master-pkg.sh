@@ -3,9 +3,16 @@
 SALT_ENGINE=${SALT_ENGINE:-pkg}
 SALT_VERSION=${SALT_VERSION:-latest}
 
+FORMULA_SOURCE=${FORMULA_SOURCE:-git}
+
+if [ "$FORMULA_SOURCE" == "git" ]; then
+  RECLASS_BASE_ENV="dev"
+elif [ "$FORMULA_SOURCE" == "pkg" ]; then
+  RECLASS_BASE_ENV="prd"
+fi
+
 RECLASS_ADDRESS=${RECLASS_ADDRESS:-https://github.com/tcpcloud/openstack-salt-model.git}
 RECLASS_BRANCH=${RECLASS_BRANCH:-master}
-RECLASS_BASE_ENV=${RECLASS_BASE_ENV:-dev}
 
 OS_DISTRIBUTION=${OS_DISTRIBUTION:-ubuntu}
 OS_NETWORKING=${OS_NETWORKING:-opencontrail}
