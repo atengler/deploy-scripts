@@ -89,7 +89,7 @@ classes:
 - system.salt.master.single
 - system.salt.master.formula.$FORMULA_SOURCE
 - system.reclass.storage.salt
-- system.reclass.storage.system.${OS_DISTRIBUTION}_${OS_NETWORKING}_${OS_DEPLOYMENT}
+- system.reclass.storage.system.$RECLASS_SYSTEM
 parameters:
   _param:
     reclass_data_repository: "$RECLASS_ADDRESS"
