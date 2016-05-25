@@ -25,8 +25,9 @@ for FORMULA_SERVICE in "${FORMULA_SERVICES[@]}"; do
 done
 
 [ ! -d /srv/salt/env ] && mkdir -p /srv/salt/env
-[ ! -L /srv/salt/env/dev ] && ln -s /usr/share/salt-formulas/env /srv/salt/env/dev
-[ ! -L /srv/salt/env/prd ] && ln -s /usr/share/salt-formulas/env /srv/salt/env/prd
+[ ! -L /srv/salt/env/dev ] && ln -s ${FORMULA_PATH}/env /srv/salt/env/dev
+[ ! -L /srv/salt/env/prd ] && ln -s ${FORMULA_PATH}/env /srv/salt/env/prd
+[ ! -L /srv/salt/reclass/classes/service ] && ln -s ${FORMULA_PATH}/reclass/service /srv/salt/reclass/classes/service
 
 echo -e "\nRestarting services ...\n"
 service salt-master restart
