@@ -4,7 +4,7 @@ CONFIG_HOSTNAME=${CONFIG_HOSTNAME:-config}
 CONFIG_DOMAIN=${CONFIG_DOMAIN:-openstack.local}
 CONFIG_HOST=${CONFIG_HOSTNAME}.${CONFIG_DOMAIN}
 
-FORMULA_PATH=${FORMULA_PATH:-/usr/share/salt-formulas/env/_formulas}
+FORMULA_PATH=${FORMULA_PATH:-/usr/share/salt-formulas}
 FORMULA_BRANCH=${FORMULA_BRANCH:-master}
 
 echo "Configuring necessary formulas ..."
@@ -15,12 +15,12 @@ declare -a FORMULA_SERVICES=("linux" "reclass" "salt" "openssh" "ntp" "git" "ngi
 
 for FORMULA_SERVICE in "${FORMULA_SERVICES[@]}"; do
     echo -e "\nConfiguring salt formula ${FORMULA_SERVICE} ...\n"
-    [ ! -d "${FORMULA_PATH}/${FORMULA_SERVICE}" ] && \
-        git clone https://github.com/tcpcloud/salt-formula-${FORMULA_SERVICE}.git ${FORMULA_PATH}/${FORMULA_SERVICE} -b ${FORMULA_BRANCH}
+    [ ! -d "${FORMULA_PATH}/env/_formulas/${FORMULA_SERVICE}" ] && \
+        git clone https://github.com/tcpcloud/salt-formula-${FORMULA_SERVICE}.git ${FORMULA_PATH}/env/_formulas/${FORMULA_SERVICE} -b ${FORMULA_BRANCH}
     [ ! -L "/usr/share/salt-formulas/env/${FORMULA_SERVICE}" ] && \
-        ln -s ${FORMULA_PATH}/${FORMULA_SERVICE}/${FORMULA_SERVICE} /usr/share/salt-formulas/env/${FORMULA_SERVICE}
+        ln -s ${FORMULA_PATH}/env/_formulas/${FORMULA_SERVICE}/${FORMULA_SERVICE} /usr/share/salt-formulas/env/${FORMULA_SERVICE}
     [ ! -L "/srv/salt/reclass/classes/service/${FORMULA_SERVICE}" ] && \
-        ln -s ${FORMULA_PATH}/${FORMULA_SERVICE}/metadata/service /srv/salt/reclass/classes/service/${FORMULA_SERVICE}
+        ln -s ${FORMULA_PATH}/env/_formulas/${FORMULA_SERVICE}/metadata/service /srv/salt/reclass/classes/service/${FORMULA_SERVICE}
 done
 
 [ ! -d /srv/salt/env ] && mkdir -p /srv/salt/env
