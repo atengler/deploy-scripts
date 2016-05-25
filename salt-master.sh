@@ -4,7 +4,7 @@ SALT_ENGINE=${SALT_ENGINE:-pkg}
 SALT_VERSION=${SALT_VERSION:-latest}
 
 FORMULA_SOURCE=${FORMULA_SOURCE:-git}
-FORMULA_PATH=${FORMULA_PATH:-/usr/share/salt-formulas/env/_formulas}
+FORMULA_PATH=${FORMULA_PATH:-/usr/share/salt-formulas}
 FORMULA_BRANCH=${FORMULA_BRANCH:-master}
 
 if [ "$FORMULA_SOURCE" == "git" ]; then
