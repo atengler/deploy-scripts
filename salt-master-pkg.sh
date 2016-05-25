@@ -64,7 +64,7 @@ EOF
 
 git clone ${RECLASS_ADDRESS} /srv/salt/reclass -b ${RECLASS_BRANCH}
 
-cat << EOF > /srv/salt/reclass/nodes/config.openstack.local
+cat << EOF > /srv/salt/reclass/nodes/config.openstack.local.yml
 classes:
 - service.git.client
 - system.linux.system.single
@@ -89,7 +89,7 @@ parameters:
 EOF
 
 if [ "$SALT_VERSION" == "latest" ]; then
-cat << EOF >> /srv/salt/reclass/nodes/config.openstack.local
+cat << EOF >> /srv/salt/reclass/nodes/config.openstack.local.yml
   salt:
     master:
       accept_policy: open_mode
@@ -100,7 +100,7 @@ cat << EOF >> /srv/salt/reclass/nodes/config.openstack.local
         engine: $SALT_ENGINE
 EOF
 else
-cat << EOF >> /srv/salt/reclass/nodes/config.openstack.local
+cat << EOF >> /srv/salt/reclass/nodes/config.openstack.local.yml
   salt:
     master:
       accept_policy: open_mode
