@@ -25,7 +25,7 @@ for FORMULA_SERVICE in "${FORMULA_SERVICES[@]}"; do
     [ ! -d "${FORMULA_PATH}/env/${FORMULA_SERVICE}" ] && \
         apt-get install -y salt-formula-${FORMULA_SERVICE}
     [ ! -L "/srv/salt/reclass/classes/service/${FORMULA_SERVICE}" ] && \
-        ln -s ${FORMULA_PATH}/reclass/service/${FORMULA_SERVICE}/metadata/service /srv/salt/reclass/classes/service/${FORMULA_SERVICE}
+        ln -s ${FORMULA_PATH}/reclass/service/${FORMULA_SERVICE} /srv/salt/reclass/classes/service/${FORMULA_SERVICE}
 done
 
 [ ! -d /srv/salt/env ] && mkdir -p /srv/salt/env
