@@ -27,7 +27,7 @@ FORMULA_SOURCE=${FORMULA_SOURCE:-git}
 
 echo -e "\nPreparing base OS repository ...\n"
 
-echo -e "deb [arch=amd64] http://apt.tcpcloud.eu/nightly/ trusty main security extra tcp tcp-salt" > /etc/apt/sources.list
+echo -e "deb [arch=amd64] http://apt.tcpcloud.eu/nightly/ trusty main security extra tcp" > /etc/apt/sources.list
 wget -O - http://apt.tcpcloud.eu/public.gpg | apt-key add -
 
 apt-get clean
