@@ -6,9 +6,9 @@ SALT_VERSION=${SALT_VERSION:-latest}
 FORMULA_SOURCE=${FORMULA_SOURCE:-git}
 
 if [ "$FORMULA_SOURCE" == "git" ]; then
-  RECLASS_BASE_ENV="dev"
+  SALT_ENV="dev"
 elif [ "$FORMULA_SOURCE" == "pkg" ]; then
-  RECLASS_BASE_ENV="prd"
+  SALT_ENV="prd"
 fi
 
 RECLASS_ADDRESS=${RECLASS_ADDRESS:-https://github.com/tcpcloud/openstack-salt-model.git}
@@ -105,7 +105,7 @@ parameters:
     reclass_config_master: $CONFIG_ADDRESS
     single_address: $CONFIG_ADDRESS
     salt_master_host: 127.0.0.1
-    salt_master_base_environment: $RECLASS_BASE_ENV
+    salt_master_base_environment: $SALT_ENV
   linux:
     system:
       name: $CONFIG_HOSTNAME

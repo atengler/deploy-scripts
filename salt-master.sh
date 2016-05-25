@@ -8,9 +8,9 @@ FORMULA_PATH=${FORMULA_PATH:-/usr/share/salt-formulas/env/_formulas}
 FORMULA_BRANCH=${FORMULA_BRANCH:-master}
 
 if [ "$FORMULA_SOURCE" == "git" ]; then
-  RECLASS_BASE_ENV="dev"
+  SALT_ENV="dev"
 elif [ "$FORMULA_SOURCE" == "pkg" ]; then
-  RECLASS_BASE_ENV="prd"
+  SALT_ENV="prd"
 fi
 
 RECLASS_ADDRESS=${RECLASS_ADDRESS:-https://github.com/tcpcloud/openstack-salt-model.git}
