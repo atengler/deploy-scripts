@@ -37,7 +37,7 @@ echo -e "\nInstalling salt master ...\n"
 
 apt-get install reclass git -y
 
-if [[ $SALT_VERSION -eq "latest" ]]; then
+if [ "$SALT_VERSION" == "latest" ]; then
   apt-get install -y salt-common salt-master salt-minion
 else
   apt-get install -y --force-yes salt-common=$SALT_VERSION salt-master=$SALT_VERSION salt-minion=$SALT_VERSION
