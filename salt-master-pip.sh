@@ -60,6 +60,11 @@ master_tops:
   reclass: *reclass
 EOF
 
+wget -O /etc/init.d/salt-minion https://anonscm.debian.org/cgit/pkg-salt/salt.git/plain/debian/salt-minion.init && chmod 755 /etc/init.d/salt-minion
+ln -s /usr/local/bin/salt-minion /usr/bin/salt-minion
+
+[ ! -d /etc/salt/minion.d ] && mkdir -p /etc/salt/minion.d
+
 echo -e "master: 127.0.0.1\nid: $CONFIG_HOST" > /etc/salt/minion.d/minion.conf
 
 echo "Configuring reclass ..."

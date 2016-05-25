@@ -53,6 +53,8 @@ master_tops:
   reclass: *reclass
 EOF
 
+[ ! -d /etc/salt/minion.d ] && mkdir -p /etc/salt/minion.d
+
 echo -e "master: 127.0.0.1\nid: $CONFIG_HOST" > /etc/salt/minion.d/minion.conf
 
 echo "Configuring reclass ..."
