@@ -8,7 +8,7 @@ RECLASS_BRANCH=${RECLASS_BRANCH:-master}
 RECLASS_BASE_ENV=${RECLASS_BASE_ENV:-dev}
 
 OS_DISTRIBUTION=${OS_DISTRIBUTION:-ubuntu}
-OS_VERSION=${OS_VERSION:-liberty}
+OS_NETWORKING=${OS_NETWORKING:-opencontrail}
 OS_DEPLOYMENT=${OS_DEPLOYMENT:-single}
 
 CONFIG_HOST=${CONFIG_HOST:-config.openstack.local}
@@ -79,7 +79,7 @@ classes:
 - system.salt.master.single
 - system.salt.master.formula.$FORMULA_SOURCE
 - system.reclass.storage.salt
-- system.reclass.storage.system.${OS_DISTRIBUTION}_${OS_VERSION}_${OS_DEPLOYMENT}
+- system.reclass.storage.system.${OS_DISTRIBUTION}_${OS_NETWORKING}_${OS_DEPLOYMENT}
 parameters:
   _param:
     reclass_data_repository: "$RECLASS_ADDRESS"
