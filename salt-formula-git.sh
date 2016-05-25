@@ -21,6 +21,10 @@ for FORMULA_SERVICE in "${FORMULA_SERVICES[@]}"; do
         ln -s ${FORMULA_PATH}/${FORMULA_SERVICE}/metadata/service /srv/salt/reclass/classes/service/${FORMULA_SERVICE}
 done
 
+[ ! -d /srv/salt/env ] && mkdir -p /srv/salt/env
+[ ! -L /srv/salt/env/dev ] && ln -s /usr/share/salt-formulas/env /srv/salt/env/dev
+[ ! -L /srv/salt/env/prd ] && ln -s /usr/share/salt-formulas/env /srv/salt/env/prd
+
 echo -e "\nRestarting services ...\n"
 service salt-master restart
 [ -f /etc/salt/pki/minion/minion_master.pub ] && rm -f /etc/salt/pki/minion/minion_master.pub
