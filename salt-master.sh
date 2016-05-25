@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 SALT_ENGINE=${SALT_ENGINE:-pkg}
 SALT_VERSION=${SALT_VERSION:-latest}
@@ -20,19 +20,21 @@ FORMULA_SOURCE=${FORMULA_SOURCE:-git}
 FORMULA_PATH=${FORMULA_PATH:-/usr/share/salt-formulas/env/_formulas}
 FORMULA_BRANCH=${FORMULA_BRANCH:-master}
 
+[ ! -d /root/deploy-scripts ] && mkdir /root/deploy-scripts
+
 if [ "$SALT_ENGINE" == "pkg" ]; then
-  wget https://raw.githubusercontent.com/atengler/deploy-scripts/master/salt-master-pkg.sh
-  source salt-master-pkg.sh
+  wget -O /root/deploy-scripts/salt-master-pkg.sh https://raw.githubusercontent.com/atengler/deploy-scripts/master/salt-master-pkg.sh
+  source /root/deploy-scripts/salt-master-pkg.sh
 elif [ "$SALT_ENGINE" == "pip" ]; then
-  wget https://raw.githubusercontent.com/atengler/deploy-scripts/master/salt-master-pip.sh
-  source salt-master-pip.sh
+  wget -O /root/deploy-scripts/salt-master-pip.sh https://raw.githubusercontent.com/atengler/deploy-scripts/master/salt-master-pip.sh
+  source /root/deploy-scripts/salt-master-pip.sh
 fi
 
 if [ "$FORMULA_SOURCE" == "pkg" ]; then
-  wget https://raw.githubusercontent.com/atengler/deploy-scripts/master/salt-formula-pkg.sh
-  source salt-formula-pkg.sh
+  wget -O /root/deploy-scripts/salt-formula-pkg.sh https://raw.githubusercontent.com/atengler/deploy-scripts/master/salt-formula-pkg.sh
+  source /root/deploy-scripts/salt-formula-pkg.sh
 elif [ "$FORMULA_SOURCE" == "git" ]; then
-  wget https://raw.githubusercontent.com/atengler/deploy-scripts/master/salt-formula-git.sh
-  source salt-formula-git.sh
+  wget -O /root/deploy-scripts/salt-formula-git.sh https://raw.githubusercontent.com/atengler/deploy-scripts/master/salt-formula-git.sh
+  source /root/deploy-scripts/salt-formula-git.sh
 fi
 
