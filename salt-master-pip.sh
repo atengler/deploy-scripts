@@ -11,6 +11,8 @@ OS_DISTRIBUTION=${OS_DISTRIBUTION:-ubuntu}
 OS_VERSION=${OS_VERSION:-liberty}
 OS_DEPLOYMENT=${OS_DEPLOYMENT:-single}
 
+CONFIG_HOST=${CONFIG_HOST:-config.openstack.local}
+
 FORMULA_SOURCE=${FORMULA_SOURCE:-git}
 
 echo -e "\nPreparing base OS repository ...\n"
@@ -54,6 +56,8 @@ ext_pillar:
 master_tops:
   reclass: *reclass
 EOF
+
+echo -e 'master: 127.0.0.1\nid: $CONFIG_HOST' > /etc/salt/minion.d/minion.conf
 
 echo "Configuring reclass ..."
 
