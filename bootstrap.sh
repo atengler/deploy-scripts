@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash -e
 
 #
 # ENVIRONMENT
@@ -351,10 +351,10 @@ run_salt_states()
     salt-call pillar.data --no-color
     
     echo -e "\nRunning necessary base states ...\n"
-    salt-call state.sls linux,salt.minion,salt --no-color
+    salt-call --retcode-passthrough state.sls linux,salt.minion,salt --no-color
     
     echo -e "\nRunning complete state ...\n"
-    salt-call state.highstate --no-color
+    salt-call --retcode-passthrough state.highstate --no-color
 }
 
 #
