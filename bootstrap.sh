@@ -29,6 +29,9 @@ CONFIG_ADDRESS=${CONFIG_ADDRESS:-10.10.10.200}
 
 CONFIG_SCRIPTS=http://openstack-salt.tcpcloud.eu/_static/scripts/bootstrap
 
+MINION_MASTER=${MINION_MASTER:-$CONFIG_ADDRESS}
+MINION_ID=${MINION_ID:-minion}
+
 [ ! -d /root/deploy-scripts ] && mkdir /root/deploy-scripts
 
 wget -O "/root/deploy-scripts/salt-master-${SALT_SOURCE}.sh" "${CONFIG_SCRIPTS}/salt-master-${SALT_SOURCE}.sh"

@@ -2,9 +2,9 @@
 
 SALT_VERSION=${SALT_VERSION:-latest}
 
-CONFIG_HOSTNAME=${CONFIG_HOSTNAME:-config}
-CONFIG_DOMAIN=${CONFIG_DOMAIN:-openstack.local}
-CONFIG_HOST=${CONFIG_HOSTNAME}.${CONFIG_DOMAIN}
+CONFIG_ADDRESS=${CONFIG_ADDRESS:-10.10.10.200}
+MINION_MASTER=${MINION_MASTER:-$CONFIG_ADDRESS}
+MINION_ID=${MINION_ID:-minion}
 
 echo -e "\nPreparing base OS repository ...\n"
 
@@ -24,5 +24,5 @@ fi
 
 [ ! -d /etc/salt/minion.d ] && mkdir -p /etc/salt/minion.d
 
-echo -e "master: 127.0.0.1\nid: $CONFIG_HOST" > /etc/salt/minion.d/minion.conf
+echo -e "master: $MINION_MASTER\nid: $MINION_ID" > /etc/salt/minion.d/minion.conf
 
