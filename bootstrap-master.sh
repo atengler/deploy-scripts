@@ -160,7 +160,7 @@ parameters:
     salt_master_base_environment: $SALT_ENV
   linux:
     system:
-      name: $CONFIG_HOSTNAME
+      name: ${CONFIG_HOSTNAME}
       domain: $CONFIG_DOMAIN
 EOF
     
