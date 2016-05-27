@@ -30,7 +30,8 @@ CONFIG_ADDRESS=${CONFIG_ADDRESS:-10.10.10.200}
 CONFIG_SCRIPTS=http://openstack-salt.tcpcloud.eu/_static/scripts/bootstrap
 
 MINION_MASTER=${MINION_MASTER:-$CONFIG_ADDRESS}
-MINION_ID=${MINION_ID:-minion}
+MINION_HOSTNAME=${MINION_HOSTNAME:-minion}
+MINION_ID=${MINION_HOSTNAME}.${CONFIG_DOMAIN}
 
 [ ! -d /root/deploy-scripts ] && mkdir /root/deploy-scripts
 
