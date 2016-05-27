@@ -1,9 +1,12 @@
 #!/bin/bash
 
-SALT_ENGINE=${SALT_ENGINE:-pkg}
-SALT_VERSION=${SALT_VERSION:-latest}
+OS_DISTRIBUTION=${OS_DISTRIBUTION:-ubuntu}
+OS_NETWORKING=${OS_NETWORKING:-opencontrail}
+OS_DEPLOYMENT=${OS_DEPLOYMENT:-single}
+OS_SYSTEM="${OS_DISTRIBUTION}_${OS_NETWORKING}_${OS_DEPLOYMENT}"
 
-FORMULA_SOURCE=${FORMULA_SOURCE:-git}
+SALT_SOURCE=${SALT_SOURCE:-pkg}
+SALT_VERSION=${SALT_VERSION:-latest}
 
 if [ "$FORMULA_SOURCE" == "git" ]; then
   SALT_ENV="dev"
@@ -11,22 +14,16 @@ elif [ "$FORMULA_SOURCE" == "pkg" ]; then
   SALT_ENV="prd"
 fi
 
+FORMULA_SOURCE=${FORMULA_SOURCE:-git}
+
 RECLASS_ADDRESS=${RECLASS_ADDRESS:-https://github.com/tcpcloud/openstack-salt-model.git}
 RECLASS_BRANCH=${RECLASS_BRANCH:-master}
-
-OS_DISTRIBUTION=${OS_DISTRIBUTION:-ubuntu}
-OS_NETWORKING=${OS_NETWORKING:-opencontrail}
-OS_DEPLOYMENT=${OS_DEPLOYMENT:-single}
-OS_SYSTEM="${OS_DISTRIBUTION}_${OS_NETWORKING}_${OS_DEPLOYMENT}"
-
 RECLASS_SYSTEM=${RECLASS_SYSTEM:-$OS_SYSTEM}
 
 CONFIG_HOSTNAME=${CONFIG_HOSTNAME:-config}
 CONFIG_DOMAIN=${CONFIG_DOMAIN:-openstack.local}
 CONFIG_HOST=${CONFIG_HOSTNAME}.${CONFIG_DOMAIN}
 CONFIG_ADDRESS=${CONFIG_ADDRESS:-10.10.10.200}
-
-FORMULA_SOURCE=${FORMULA_SOURCE:-git}
 
 echo -e "\nPreparing base OS repository ...\n"
 
@@ -112,10 +109,10 @@ cat << EOF >> /srv/salt/reclass/nodes/${CONFIG_HOST}.yml
     master:
       accept_policy: open_mode
       source:
-        engine: $SALT_ENGINE
+        engine: $SALT_SOURCE
     minion:
       source:
-        engine: $SALT_ENGINE
+        engine: $SALT_SOURCE
 EOF
 
 else
@@ -125,15 +122,14 @@ cat << EOF >> /srv/salt/reclass/nodes/${CONFIG_HOST}.yml
     master:
       accept_policy: open_mode
       source:
-        engine: $SALT_ENGINE
+        engine: $SALT_SOURCE
         version: $SALT_VERSION
     minion:
       source:
-        engine: $SALT_ENGINE
+        engine: $SALT_SOURCE
         version: $SALT_VERSION
 EOF
 
 fi
 
 fi
-
