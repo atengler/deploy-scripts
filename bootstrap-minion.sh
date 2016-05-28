@@ -42,6 +42,8 @@ install_salt_minion_pkg()
     echo -e "master: $MINION_MASTER\nid: $MINION_ID" > /etc/salt/minion.d/minion.conf
 
     service salt-minion restart
+
+    salt-call pillar.data > /dev/null 2>&1
 }
 
 install_salt_minion_pip()
@@ -77,6 +79,8 @@ install_salt_minion_pip()
     ln -s /usr/local/bin/salt-minion /usr/bin/salt-minion
 
     service salt-minion restart
+
+    salt-call pillar.data > /dev/null 2>&1
 }
 
 #

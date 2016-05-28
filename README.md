@@ -4,7 +4,7 @@
 
 **Bootstrap Salt master**
 
-`./bootstrap-master.sh
+`./bootstrap-master.sh`
 
 **Bootstrap Salt minion**
 
