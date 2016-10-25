@@ -2,6 +2,14 @@
 
 # Variables
 export GRAFANA_REPO="github.com/atengler/grafana"
+export RUN_SERVER=true
+export GRUNT_WATCH=true
+
+# Cleanup on exit
+
+function kill_grunt {
+  kill $GRUNT_PID
+}
 
 # Setup install dependencies
 echo "Checking installation dependencies ..."
@@ -33,9 +41,11 @@ if ! $(go version | grep "1.7" > /dev/null); then
 fi
 
 # Install Grafana from source
-echo "Installing Grafana from source ..."
+echo "Checking Grafana installation ..."
 
 if [ ! -d $GOPATH ]; then
+    echo "Installing Grafana from source ..."
+
     mkdir -p $GOPATH
     cd $GOPATH
 
@@ -56,7 +66,20 @@ if [ ! -d $GOPATH ]; then
     # Install frontend assets
     npm install
     npm run build
+    npm install -g grunt-cli
+
+    echo "Setup complete!"
 fi
 
-echo "Setup complete!"
+if $RUN_SERVER; then
+    cd $GOPATH/src/github.com/grafana/grafana
+    if $GRUNT_WATCH; then
+        echo "Starting Grunt watch ..."
+        trap kill_grunt EXIT
+        grunt watch &
+        export GRUNT_PID=$!
+    fi
+    echo "Starting Grafana server ..."
+    ./bin/grafana-server
+fi
 
