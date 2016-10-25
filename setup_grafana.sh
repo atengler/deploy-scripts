@@ -5,6 +5,7 @@ export GRAFANA_REPO="github.com/atengler/grafana"
 
 # Setup install dependencies
 echo "Checking installation dependencies ..."
+
 apt-get -qq update || (echo "Package meta update failed, check your internet connection" && exit 1)
 git --version > /dev/null 2>&1 || apt-get install git -y
 wget --version > /dev/null 2>&1 || apt-get install wget -y
@@ -58,3 +59,4 @@ if [ ! -d $GOPATH ]; then
 fi
 
 echo "Setup complete!"
+
