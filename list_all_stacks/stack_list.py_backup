@@ -1,0 +1,127 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from collections import namedtuple
+from datetime import datetime
+from heatclient import client as heatclient
+from keystoneauth1 import loading, session
+from keystoneclient.v2_0 import client as keystoneclient
+
+AUTH_URL = "https://vpc.tcpisek.cz:5000/v2.0"
+USERNAME = "admin"
+PASSWORD = "SHJNqHg5a8MmQDxM"
+PROJECT_ID = "4b531412425240f693e602423fee5ab6"
+
+
+class ClientManager(object):
+    def __init__(self, auth_url, username, password, project_id):
+        self.auth_url = auth_url
+        self.username = username
+        self.password = password
+        self.project_id = project_id
+
+    @property
+    def session(self):
+        loader = loading.get_plugin_loader('password')
+        auth = loader.load_from_options(auth_url=self.auth_url,
+                                        username=self.username,
+                                        password=self.password,
+                                        project_id=self.project_id)
+        return session.Session(auth=auth)
+
+    @property
+    def keystone(self):
+        return keystoneclient.Client(session=self.session)
+    
+    @property    
+    def heat(self):
+        return heatclient.Client('1', session=self.session)
+
+
+def _print_table(rows):
+    headers = rows[0]._fields
+    lens = []
+    for i in range(len(rows[0])):
+      lens.append(len(max([x[i] for x in rows] + [headers[i]],key=lambda x:len(str(x)))))
+    formats = []
+    hformats = []
+    for i in range(len(rows[0])):
+      if isinstance(rows[0][i], int):
+        formats.append("%%%dd" % lens[i])
+      else:
+        formats.append("%%-%ds" % lens[i])
+      hformats.append("%%-%ds" % lens[i])
+    pattern = " | ".join(formats)
+    hpattern = " | ".join(hformats)
+    separator = "-+-".join(['-' * n for n in lens])
+    print hpattern % tuple(headers)
+    print separator
+    _u = lambda t: t.decode('UTF-8', 'replace') if isinstance(t, str) else t
+    for line in rows:
+        print pattern % tuple(_u(t) for t in line)
+
+
+def _format_datetime(datetime_str):
+    try:
+        formatted_time = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S').strftime('%c')
+    except:
+        formatted_time = datetime_str
+    return formatted_time
+
+
+def _process_project(manager, project):
+    Row = namedtuple('Row', ['Author', 'Created', 'Name', 'Status'])
+    manager.project_id = project.id
+    print 'Looking for stacks in project %s - %s' % (project.name, project.id)
+    try:
+        stack_info = [{'name': stack.stack_name, 'creation_time': _format_datetime(stack.creation_time), 'status': stack.stack_status, 'author': ''}
+                      for stack
+                      in manager.heat.stacks.list()]
+    
+        for stack in stack_info:
+            name_list = stack.get('name').split('-') or stack.get('name').split('_')
+            if name_list:
+                user = [str(user.username) + ', ' + str(user.email) for user in user_list if user.username == name_list[0]]
+                if user:
+                    stack['author'] = user[0]
+    
+        stack_rows = [Row(stack.get('author', ''), stack.get('creation_time', ''), stack.get('name', ''), stack.get('status', '')) for stack in stack_info]
+        project_data = {
+            'tenant_id': project.id,
+            'tenant_name': project.name,
+            'stack_info': stack_rows
+        }
+        print '\'-> Lookup successfull!'
+    except Exception as e:
+        project_data = {}
+        print '\'-> Lookup failed! - %s' % repr(e)
+
+    return project_data
+
+
+def main():
+    manager = ClientManager(AUTH_URL, USERNAME, PASSWORD, PROJECT_ID)
+    project_list = manager.keystone.tenants.list()
+    global user_list
+    user_list = [user for user in manager.keystone.users.list()]
+    projects = []
+
+    for project in project_list:
+        if project.enabled:
+            project_data = _process_project(manager, project)
+            projects.append(project_data)
+
+    clean_projects = [p for p in projects if p.get('stack_info', [])]
+
+    for project in clean_projects:
+        heading = 'Project: %s - %s' % (project.get('tenant_name', ''), project.get('tenant_id', ''))
+        underline = ''.join(['=' for char in heading])
+        print '\n\n%s\n%s\n\n' % (heading, underline)
+        _print_table(project.get('stack_info'))
+
+    print '\n\n'
+
+
+if __name__ == "__main__":
+    main()
+
